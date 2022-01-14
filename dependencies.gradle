@@ -37,8 +37,8 @@ ext {
             rxjava          : '2.2.10',
             rxbinding       : '3.0.0-alpha2',
             retrofit        : '2.7.0',
-            arouter         : '1.2.1.1',
-            arouter_compiler: '1.1.2.1',
+            arouter_version        : '1.2.1.1',
+            arouter_compiler_version: '1.1.2.1',
             immersionbar    : '3.0.0-beta05',
             glide           : '4.9.0',
             glide_ap        : '4.9.0',
@@ -60,7 +60,7 @@ ext {
     ]
     build_plugins = [
             gradle_plugin        : [group: 'com.android.tools.build', name: 'gradle', version: versions.gradle_plugin_version],
-            kotlin_gradle_plugin : [group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: versions.kotlin_gradle_version],
+            kotlin_gradle_plugin : [group: 'org.jetbrains.kotlin', name: 'kotlin-gradle-plugin', version: '1.6.10'],
             andResGuard          : [group: 'com.tencent.mm', name: 'AndResGuard-gradle-plugin', version: versions.andResGuard_version]
     ]
     libs = [
@@ -110,8 +110,8 @@ ext {
             okhttp_log      : [group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: versions.okhttp_log],
 
             // 阿里模块化路由
-            arouter         : [group: 'com.alibaba', name: 'arouter-api', version: versions.arouter],
-            arouter_compiler: [group: 'com.alibaba', name: 'arouter-compiler', version: versions.arouter_compiler],
+            arouter         : [group: 'com.alibaba', name: 'arouter-api', version: versions.arouter_version],
+            arouter_compiler: [group: 'com.alibaba', name: 'arouter-compiler', version: versions.arouter_compiler_version],
 
             // 沉浸式库
             immersionbar    : [group: 'com.gyf.immersionbar', name: 'immersionbar', version: versions.immersionbar],

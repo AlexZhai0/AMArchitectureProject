@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.library'
+//     id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdkVersion build_version.compileSdkVersion
+
+    defaultConfig {
+        // applicationId "cn.alex.commonmodule"
+        targetSdkVersion build_version.targetSdkVersion
+        minSdkVersion build_version.minSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    api project(":basemodule")
+    // 每个独立的 Module 需要 kapt libs.arouter_compiler
+    // defaultConfig{} 中需要添加 javaCompileOptions{}
+    api libs.arouter
+}

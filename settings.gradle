@@ -8,3 +8,7 @@
 //}
 rootProject.name = "AMArchitectureProject"
 include ':app'
+include ':basemodule'
+include ':commonmodule'
+include ':loginmodule'
+include ':minemodule'

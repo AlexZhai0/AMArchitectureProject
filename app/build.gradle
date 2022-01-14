@@ -49,6 +49,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 andResGuard {
@@ -109,10 +112,8 @@ dependencies {
     androidTestImplementation libs.test_runner
     androidTestImplementation libs.test_espresso
 
-    // 项目默认库
-    implementation libs.appcompat
-    implementation libs.material
-    implementation libs.constraint
-    implementation libs.androidx_core
+    implementation project(":commonmodule")
+    implementation project(":loginmodule")
+    implementation project(":minemodule")
 
 }

@@ -1,0 +1,51 @@
+plugins {
+    id 'com.android.library'
+//    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdkVersion build_version.compileSdkVersion
+
+    defaultConfig {
+        // applicationId "cn.alex.basemodule"
+        targetSdkVersion build_version.targetSdkVersion
+        minSdkVersion build_version.minSdkVersion
+        // versionCode build_version.versionCode
+        // versionName build_version.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    // 单元测试相关库
+    testImplementation libs.junit
+    androidTestImplementation libs.test_ext
+    androidTestImplementation libs.test_runner
+    androidTestImplementation libs.test_espresso
+
+    // 项目默认库
+    api libs.appcompat
+    api libs.material
+    api libs.constraint
+    api libs.androidx_core
+
+}
