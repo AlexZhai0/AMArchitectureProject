@@ -1,15 +1,31 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+
+    apply from: 'dependencies.gradle'
+
     repositories {
-        google()
-        mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.4"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath build_plugins.gradle_plugin
+        classpath build_plugins.kotlin_gradle_plugin
+        //资源混淆缩小APK大小的工具
+        classpath build_plugins.andResGuard
+    }
+}
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+allprojects {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://storage.flutter-io.cn/download.flutter.io' }
+        // maven { url 'https://storage.googleapis.com/download.flutter.io' }
+        maven { url 'http://download.flutter.io'}
+        maven { url 'https://jitpack.io' }
     }
 }
 
