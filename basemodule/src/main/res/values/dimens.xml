@@ -1,0 +1,15 @@
+<resources>
+
+    <!-- v7.1.00 版本 - UI规范，边距统一处理。注意：只有符合边距条件的使用下面的值，方便以后统一修改 -->
+    <!-- 页面内容距离两边边框的距离 -->
+    <dimen name="border_distance">12dp</dimen>
+    <!-- 页面内容之间的距离 -->
+    <dimen name="content_distance">8dp</dimen>
+    <!-- 普通控件圆角 -->
+    <dimen name="view_corner">8dp</dimen>
+    <!-- 从底部弹出的控件圆角 -->
+    <dimen name="bottom_view_corner">20dp</dimen>
+
+    <!-- Dialog 统一背景透明度 -->
+    <item type="dimen" format="float" name="dialog_bg_color">0.5</item>
+</resources>
