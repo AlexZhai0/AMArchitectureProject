@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import cn.alex.basemodule.R
+import cn.alex.basemodule.application.BaseApplication
 
 
 /**
@@ -42,15 +43,25 @@ fun Context.getActivity(): FragmentActivity? {
     }
     return null
 }
+
 // 通过 View 获取当前 FragmentActivity
 fun View.getActivity(): FragmentActivity? {
     return context.getActivity()
 }
 
-//val Context?.application: App?
-//    get() {
-//        return this?.getActivity()?.application as? App
-//    }
+// 主应用中的 ApplicationContext
+val appContext: Context? = application?.applicationContext
+
+// 主应用中的 Application
+val application: BaseApplication?
+    @SuppressLint("PrivateApi")
+    get() {
+        return tryCatchT {
+            Class.forName("android.app.ActivityThread")
+                .getMethod("currentApplication")
+                .invoke(null) as? BaseApplication
+        }
+    }
 
 fun Activity?.isDestroy() = this == null || this.isFinishing || this.isDestroyed
 
@@ -59,8 +70,9 @@ fun Activity?.isDestroy() = this == null || this.isFinishing || this.isDestroyed
  */
 fun setFullScreen(activity: Activity?) {
     activity?.window?.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        WindowManager.LayoutParams.FLAG_FULLSCREEN
+    )
 }
 
 /**
@@ -80,36 +92,6 @@ fun setWindowBackground(context: Context?, alpha: Float) {
     activity?.window?.attributes = layoutParams
 }
 
-
-/**
- * 通过反射获取 ApplicationContext
- */
-@SuppressLint("PrivateApi", "DiscouragedPrivateApi")
-fun getApplicationContextUseReflection(): Context {
-    val activityThreadClass = Context::class.java.classLoader?.loadClass("android.app.ActivityThread")
-    val currentActivityThread = activityThreadClass?.getDeclaredMethod("currentActivityThread")
-    val activityThread = currentActivityThread?.invoke(null)
-    val getApplication = activityThreadClass?.getDeclaredMethod("getApplication")
-    val application = getApplication?.invoke(activityThread) as Application
-    return application.applicationContext
-}
-
-/**
- * 找到当前 View 所在的 Fragment，并在此页面中处理事件
- *
- * 注意：确保一定能找到 View 所在的 Fragment，该方法必须在 view.post{} 中执行（点击事件
- * 除外，因为点击事件中该 View 已经完全初始化）
- */
-inline fun <reified F: Fragment> View.findFragmentIntoAction(
-    action: (frag: F) -> Unit
-) {
-    when (val frag = this.findCurrentFragment()) {
-        is F -> {
-            action.invoke(frag)
-        }
-    }
-}
-
 /**
  * 对 「¥0.00」中加划线
  */
@@ -124,24 +106,26 @@ fun TextView.addTextUnderLine(source: String) {
  */
 fun EditText?.showSoftInput() {
     this?.requestFocus()
-    this?.getActivity()?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+    this?.getActivity()?.window
+        ?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     val softInputManager =
-            this?.getActivity()?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        this?.getActivity()?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     softInputManager?.toggleSoftInputFromWindow(this?.windowToken, 0, 0)
 }
 
 // 关闭软键盘 1
 fun EditText?.hideSoftInput() {
     val softInputManager =
-            this?.getActivity()?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-    this?.getActivity()?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        this?.getActivity()?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+    this?.getActivity()?.window
+        ?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     softInputManager?.hideSoftInputFromWindow(this?.windowToken, 0)
 }
+
 // 关闭软键盘 2
 fun Activity?.hideSoftInput() {
     val softInputManager =
-            this?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-    // this?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        this?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
     val decorView = this?.window?.decorView
     softInputManager?.hideSoftInputFromWindow(decorView?.windowToken, 0)
 }
@@ -150,32 +134,8 @@ fun Activity?.hideSoftInput() {
  * 软键盘是否已经弹出了
  */
 fun Activity?.isSoftInputShowing(): Boolean {
-    return this?.window?.attributes?.softInputMode == WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-}
-
-/**
- * 根据屏幕尺寸及当前商品金额，动态计算"已售"字段是否展示
- *
- */
-fun calculateSaleNumHasShowSpace(cardWidth: Int, textWidth: Float, priceWidth: Float, priceText: String, saleText: String): Boolean {
-    //使用组件宽度 videoWidth 减去 homeStreamGoodsTruePrice 宽度 和右侧按钮宽度
-    //剩余宽度和 textWidth 对比是否显示的下
-    val subPointTextLength = priceText.indexOf(".")
-    val changedTextWidthNum = if (subPointTextLength > 0) {
-        priceText.length - subPointTextLength
-    } else {
-        0
-    }
-
-    val dp12TextWidth = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 12.dp.toFloat()
-        typeface = Typeface.defaultFromStyle(Typeface.BOLD)
-    }.measureText(priceText)
-    // 大小字体样式span以后的差值，均分后按照小数点和¥的数量进行宽度补偿
-    val reCalculateWidth = (priceWidth - dp12TextWidth) / (priceText.length) * (changedTextWidthNum + 1)
-    // 34dp为右侧图片及margin距离，15dp为左侧margin距离
-    val calculateWidth = cardWidth - priceWidth - 34.dp - 15.dp + reCalculateWidth
-    return textWidth.compareTo(calculateWidth) < 0
+    return this?.window?.attributes?.softInputMode ==
+            WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 }
 
 /**
@@ -252,6 +212,7 @@ class BlockListener<T>(
         }
     }
 }
+
 /*
  * 对每个 View 类型设置 FullSpan，除了瀑布流其余都是默认一列
  */
@@ -275,6 +236,7 @@ fun View?.resetParamsWithWHRatio(realWidth: Float, ratio: Float) {
     param?.height = (realWidth / ratio).toInt()
     this?.layoutParams = param
 }
+
 // 使用实际的宽高来设置 View，可以单独设置宽或高
 fun View?.resetParamsWithWH(realWidth: Float? = null, realHeight: Float? = null) {
     val param = this?.layoutParams
@@ -282,6 +244,7 @@ fun View?.resetParamsWithWH(realWidth: Float? = null, realHeight: Float? = null)
     realHeight?.let { param?.height = it.toInt() }
     this?.layoutParams = param
 }
+
 // 使用 View 的 Margin
 fun View?.resetMargin(
     leftMargin: Int? = null,
@@ -439,31 +402,62 @@ fun TextView?.amountDecimalUnitValue(
     }
 
     //设置整数部分的字号和加粗
-    if(integerStart.hasValue()){
-        spannable.setSpan(AbsoluteSizeSpan(integerSize, true), integerStart!!, integerEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        if(integerBold){
-            spannable.setSpan(StyleSpan(Typeface.BOLD), integerStart!!, integerEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    if (integerStart.hasValue()) {
+        spannable.setSpan(
+            AbsoluteSizeSpan(integerSize, true),
+            integerStart!!,
+            integerEnd,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        if (integerBold) {
+            spannable.setSpan(
+                StyleSpan(Typeface.BOLD),
+                integerStart!!,
+                integerEnd,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
     }
     //设置小数部分的字号和加粗
-    if(decimalStart.hasValue()){
-        spannable.setSpan(AbsoluteSizeSpan(decimalSize, true), decimalStart!!, decimalEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    if (decimalStart.hasValue()) {
+        spannable.setSpan(
+            AbsoluteSizeSpan(decimalSize, true),
+            decimalStart!!,
+            decimalEnd,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
-        if(decimalBold){
-            spannable.setSpan(StyleSpan(Typeface.BOLD), decimalStart!!, decimalEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (decimalBold) {
+            spannable.setSpan(
+                StyleSpan(Typeface.BOLD),
+                decimalStart!!,
+                decimalEnd,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
     }
     //设置符号部分的字号和加粗
-    if(suffixStart.hasValue() && suffixEnd.hasValue()){
-        spannable.setSpan(AbsoluteSizeSpan(suffixSize, true), suffixStart!!, suffixEnd!!, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    if (suffixStart.hasValue() && suffixEnd.hasValue()) {
+        spannable.setSpan(
+            AbsoluteSizeSpan(suffixSize, true),
+            suffixStart!!,
+            suffixEnd!!,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
-        if(suffixBold){
-            spannable.setSpan(StyleSpan(Typeface.BOLD), suffixStart!!, suffixEnd!!, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (suffixBold) {
+            spannable.setSpan(
+                StyleSpan(Typeface.BOLD),
+                suffixStart!!,
+                suffixEnd!!,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
     }
     //设置超出maxOriginalLength后的整体缩小
     if (source.length > maxOriginalLength) {
-        spannable.setSpan(RelativeSizeSpan((1f / source.length) / (1f / maxOriginalLength)),
+        spannable.setSpan(
+            RelativeSizeSpan((1f / source.length) / (1f / maxOriginalLength)),
             0, source.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
     }

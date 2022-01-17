@@ -11,5 +11,5 @@
     <dimen name="bottom_view_corner">20dp</dimen>
 
     <!-- Dialog 统一背景透明度 -->
-    <item type="dimen" format="float" name="dialog_bg_color">0.5</item>
+    <item name="dialog_bg_color" format="float" type="dimen">0.5</item>
 </resources>

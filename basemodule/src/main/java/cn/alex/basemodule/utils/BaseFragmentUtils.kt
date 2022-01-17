@@ -17,6 +17,7 @@ fun View?.findCurrentFragment(): Fragment? {
         findSupportFragment(this, activity)
     } else null
 }
+
 private val tempViewToSupportFragment by lazy { ArrayMap<View, Fragment>() }
 private fun findSupportFragment(
     target: View?,
@@ -43,6 +44,7 @@ private fun findSupportFragment(
     tempViewToSupportFragment.clear()
     return result
 }
+
 private fun findAllSupportFragmentsWithViews(
     topLevelFragments: Collection<Fragment>?,
     result: MutableMap<View?, Fragment>
@@ -73,7 +75,7 @@ fun instantiateFragment(context: Context, name: String, args: Bundle? = null): F
         }
         f
     } catch (e: Exception) {
-//        logI("NavigationUtils", e.printStackTrace().toString() + "初始化 Fragment 失败")
+        logE(LOG_MARK, e.printStackTrace().toString() + "初始化 Fragment 失败")
         null
     }
 }
