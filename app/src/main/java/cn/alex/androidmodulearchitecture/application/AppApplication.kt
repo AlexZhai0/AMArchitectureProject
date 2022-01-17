@@ -1,9 +1,10 @@
-package cn.alex.androidmodulearchitecture
-import android.app.Application
+package cn.alex.androidmodulearchitecture.application
 import cn.alex.androidmodulearchitecture.BuildConfig.DEBUG
+import cn.alex.commonmodule.application.CommonApplication
+import cn.alex.commonmodule.router.manager.ARouterPathManager
 import com.alibaba.android.arouter.launcher.ARouter
 
-class MyApplication: Application() {
+class AppApplication: CommonApplication() {
 
     override fun onCreate() {
         super.onCreate()
@@ -12,6 +13,7 @@ class MyApplication: Application() {
             ARouter.openDebug()//开启debug模式
         }
         ARouter.init(this)
+        ARouterPathManager.registerModulePath()
 
     }
 }

@@ -1,8 +1,8 @@
 package cn.alex.commonmodule.router.module
 
-import cn.alex.commonmodule.router.manager.ARouterPathManager.routerItem
+import cn.alex.commonmodule.router.manager.ModuleRouterItem
 
-class AppModuleRouter {
+class AppModuleRouter: ModuleRouterItem() {
 
     companion object {
         // 主 Module

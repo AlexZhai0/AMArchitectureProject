@@ -1,15 +1,18 @@
-plugins {
-//    id 'com.android.application'
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
+if (buildLoginModule2Project.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
 }
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion build_version.compileSdkVersion
 
     defaultConfig {
-//        applicationId "cn.alex.loginmodule"
+        if (buildLoginModule2Project.toBoolean()) {
+            applicationId "cn.alex.loginmodule"
+        }
         targetSdkVersion build_version.targetSdkVersion
         minSdkVersion build_version.minSdkVersion
 
@@ -21,7 +24,15 @@ android {
             }
         }
     }
-
+    sourceSets {
+        main {
+            if (buildLoginModule2Project.toBoolean()) {
+                manifest.srcFile 'src/main/debug/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/release/AndroidManifest.xml'
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled true
