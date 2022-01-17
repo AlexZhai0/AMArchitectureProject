@@ -4,6 +4,7 @@ import cn.alex.basemodule.application.BaseApplication
 import cn.alex.commonmodule.BuildConfig.DEBUG
 import cn.alex.commonmodule.router.manager.ARouterPathManager
 import com.alibaba.android.arouter.launcher.ARouter
+import com.tencent.mmkv.MMKV
 
 open class CommonApplication: BaseApplication() {
 
@@ -17,5 +18,8 @@ open class CommonApplication: BaseApplication() {
         }
         ARouter.init(this)
         ARouterPathManager.registerModulePath()
+
+        // 初始化 MMKV
+        MMKV.initialize(this)
     }
 }

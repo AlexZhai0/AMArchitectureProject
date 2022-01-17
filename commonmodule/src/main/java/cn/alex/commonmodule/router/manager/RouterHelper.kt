@@ -76,7 +76,12 @@ fun String.matchFlutter(): Matcher? {
  * 使用页面路径打开对应页面
  * 路径包括：xyqb://、/login/..
  */
-fun aRouterNavigation(context: Context?, navUrl: String?, params: Map<String, String>? = null) {
+fun aRouterNavigation(
+    context: Context?,
+    navUrl: String?,
+    params: Map<String, String>? = null,
+    bundle: Bundle? = null
+) {
     if (context == null || !navUrl.hasValue()) return
     val localPath = if (navUrl!!.startsWith("/")) {
         navUrl
@@ -85,22 +90,29 @@ fun aRouterNavigation(context: Context?, navUrl: String?, params: Map<String, St
     }
     if (!localPath.hasValue()) return
     val postCard = ARouter.getInstance().build(localPath)
-    params.value {
+    params?.value {
         for (p in it) {
             postCard.withString(p.key, p.value)
         }
+    }
+    bundle?.value {
+        postCard.with(bundle)
     }
     postCard.navigation()
     if (postCard.type == RouteType.FRAGMENT) {
         // TODO frag 已经是 Fragment 实例，怎么使用 ContainerActivity 打开？
         val frag = postCard.navigation() as? Fragment
         if (!frag.hasValue()) return
-        val bundle = Bundle()
+        val b = if (bundle.hasValue()){
+            bundle
+        } else {
+            Bundle()
+        }
         params.value {
             for (p in it) {
-                bundle.putString(p.key, p.value)
+                b?.putString(p.key, p.value)
             }
         }
-        ContainerActivity.startWithFragName(context, frag!!.javaClass.name, bundle)
+        ContainerActivity.startWithFragName(context, frag!!.javaClass.name, b)
     }
 }

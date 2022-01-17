@@ -47,5 +47,6 @@ dependencies {
     api libs.material
     api libs.constraint
     api libs.androidx_core
+    api libs.mmkv
 
 }

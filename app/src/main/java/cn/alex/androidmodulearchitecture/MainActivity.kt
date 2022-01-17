@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import cn.alex.androidmodulearchitecture.databinding.ActivityMainBinding
 import cn.alex.basemodule.inflate
+import cn.alex.commonmodule.login.onLoginClick
 import cn.alex.commonmodule.router.manager.aRouterNavigation
+import cn.alex.commonmodule.router.module.LoginModuleRouter
 import cn.alex.commonmodule.router.module.MineModuleRouter
+import cn.alex.commonmodule.sp.SharedPrefsCommon
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,13 +21,15 @@ class MainActivity : AppCompatActivity() {
         // val binding = ActivityMainBinding.inflate(layoutInflater)
         // setContentView(binding.root)
 
+        SharedPrefsCommon.appToken = ""
 
-        binding?.btnLogin?.setOnClickListener {
+
+        binding?.btnLogin?.onLoginClick {
             val params = HashMap<String, String>()
             params["url11"] = "http:ssssss"
             params["kkk"] = "333333"
-//            aRouterNavigation(this, LoginModuleRouter.RM_LOGIN_P, params)
-            aRouterNavigation(this, "xyqb://login/main/page", params)
+            aRouterNavigation(this, MineModuleRouter.RM_MINE_M, params)
+//            aRouterNavigation(this, "xyqb://login/main/page", params)
         }
 
         binding?.btnMine?.setOnClickListener {
