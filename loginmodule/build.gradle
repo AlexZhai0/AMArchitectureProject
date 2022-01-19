@@ -1,4 +1,4 @@
-if (buildLoginModule2Project.toBoolean()) {
+if (buildModule2Project.toBoolean()) {
     apply plugin: 'com.android.application'
 } else {
     apply plugin: 'com.android.library'
@@ -10,7 +10,7 @@ android {
     compileSdkVersion build_version.compileSdkVersion
 
     defaultConfig {
-        if (buildLoginModule2Project.toBoolean()) {
+        if (buildModule2Project.toBoolean()) {
             applicationId "cn.alex.loginmodule"
         }
         targetSdkVersion build_version.targetSdkVersion
@@ -26,7 +26,7 @@ android {
     }
     sourceSets {
         main {
-            if (buildLoginModule2Project.toBoolean()) {
+            if (buildModule2Project.toBoolean()) {
                 manifest.srcFile 'src/main/debug/AndroidManifest.xml'
             } else {
                 manifest.srcFile 'src/main/release/AndroidManifest.xml'

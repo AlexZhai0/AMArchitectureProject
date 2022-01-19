@@ -7,6 +7,7 @@ import cn.alex.androidmodulearchitecture.databinding.ActivityMainBinding
 import cn.alex.basemodule.inflate
 import cn.alex.commonmodule.login.onLoginClick
 import cn.alex.commonmodule.router.module.MineModuleRouter
+import cn.alex.commonmodule.router.module.WebModuleRouter
 import cn.alex.commonmodule.router.navigation.RouterNavigation
 import cn.alex.commonmodule.sp.SharedPrefsCommon
 
@@ -27,7 +28,9 @@ class MainActivity : AppCompatActivity() {
             val params = HashMap<String, String>()
             params["url11"] = "http:ssssss"
             params["kkk"] = "333333"
-            RouterNavigation.openPageWithUrl(this, MineModuleRouter.RM_MINE_M, params)
+            params["turl"] = "http......."
+//            RouterNavigation.openPageWithUrl(this, MineModuleRouter.RM_MINE_M, params)
+            RouterNavigation.openPageWithUrl(this, WebModuleRouter.RM_WEB_ACT, params)
 //            aRouterNavigation(this, "xyqb://login/main/page", params)
         }
 

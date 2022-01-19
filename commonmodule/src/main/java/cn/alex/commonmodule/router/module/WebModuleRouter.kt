@@ -13,7 +13,7 @@ class WebModuleRouter: ModuleRouterItem() {
     init {
         routerItem {
             path = RM_WEB_ACT
-            className = "WebActivity"
+            className = "WebMainActivity"
             classTitle = "WebView页面"
             param = "turl"
         }

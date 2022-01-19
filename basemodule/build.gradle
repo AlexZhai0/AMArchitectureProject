@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.library'
-//    id 'com.android.application'
     id 'kotlin-android'
 }
 
@@ -8,11 +7,8 @@ android {
     compileSdkVersion build_version.compileSdkVersion
 
     defaultConfig {
-        // applicationId "cn.alex.basemodule"
         targetSdkVersion build_version.targetSdkVersion
         minSdkVersion build_version.minSdkVersion
-        // versionCode build_version.versionCode
-        // versionName build_version.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

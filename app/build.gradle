@@ -84,5 +84,6 @@ dependencies {
     implementation project(":commonmodule")
     implementation project(":loginmodule")
     implementation project(":minemodule")
+    implementation project(":webmodule")
 
 }
