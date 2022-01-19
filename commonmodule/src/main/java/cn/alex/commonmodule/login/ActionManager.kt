@@ -1,14 +1,13 @@
 package cn.alex.commonmodule.login
 
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import cn.alex.commonmodule.router.manager.aRouterNavigation
 import cn.alex.commonmodule.router.module.LoginModuleRouter
+import cn.alex.commonmodule.router.navigation.RouterNavigation
 import cn.alex.commonmodule.sp.SharedPrefsCommon
 
 /**
@@ -97,7 +96,7 @@ fun Fragment.loginAction(action: () -> Unit) {
  */
 fun checkLoginAction(context: Context, action: () -> Unit) {
     if (!SharedPrefsCommon.isLogin) {
-        aRouterNavigation(context, LoginModuleRouter.RM_LOGIN_P)
+        RouterNavigation.openPageWithUrl(context, LoginModuleRouter.RM_LOGIN_P)
     } else {
         action()
     }
@@ -139,7 +138,7 @@ class OnLoginClickListener(val listener: View.OnClickListener) : View.OnClickLis
 private fun addLoginAction(context: Context?, actionItem: ActionManager.LoginActionItem) {
     ActionManager.remove(ActionManager.ACTION_LOGIN)
     if (!SharedPrefsCommon.isLogin) {
-        aRouterNavigation(context, LoginModuleRouter.RM_LOGIN_P, bundle = actionItem.extras)
+        RouterNavigation.openPageWithUrl(context, LoginModuleRouter.RM_LOGIN_P, bundle = actionItem.extras)
         ActionManager.addActionItem(ActionManager.ACTION_LOGIN, actionItem)
     } else actionItem.action.invoke()
 }

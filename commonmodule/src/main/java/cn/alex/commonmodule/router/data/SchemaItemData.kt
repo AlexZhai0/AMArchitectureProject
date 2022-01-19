@@ -1,4 +1,4 @@
-package cn.alex.commonmodule.router.manager
+package cn.alex.commonmodule.router.data
 
 /**
  * 页面路由实体

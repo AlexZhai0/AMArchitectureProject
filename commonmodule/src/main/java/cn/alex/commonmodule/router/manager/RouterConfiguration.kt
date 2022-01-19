@@ -1,5 +1,7 @@
 package cn.alex.commonmodule.router.manager
 
+import cn.alex.commonmodule.router.data.SchemaItemData
+
 /**
  * 本地页面路由配置汇总
  */
